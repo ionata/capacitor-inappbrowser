@@ -53,6 +53,7 @@ public class InAppBrowserPlugin: CAPPlugin {
         }
 
         let headers = call.getObject("headers", [:]).mapValues { String(describing: $0 as Any) }
+        let credentials = call.getObject("credentials", [:]).mapValues { String(describing: $0 as Any) }
 
         var disclaimerContent = call.getObject("shareDisclaimer")
         let toolbarType = call.getString("toolbarType", "")
@@ -66,14 +67,14 @@ public class InAppBrowserPlugin: CAPPlugin {
         DispatchQueue.main.async {
             let url = URL(string: urlString)
 
-            if self.isPresentAfterPageLoad {
-                self.webViewController = WKWebViewController.init(url: url!, headers: headers)
-            } else {
-                self.webViewController = WKWebViewController.init()
-                self.webViewController?.setHeaders(headers: headers)
+            self.webViewController = WKWebViewController.init(url: url!)
+            self.webViewController?.setHeaders(headers: headers)
+            if !credentials.isEmpty {
+                self.webViewController?.setCredentials(credentials: credentials)
             }
-
-            self.webViewController?.source = .remote(url!)
+            if self.isPresentAfterPageLoad {
+                self.webViewController?.initWebview()
+            }
             self.webViewController?.leftNavigaionBarItemTypes = self.getToolbarItems(toolbarType: toolbarType)
             self.webViewController?.toolbarItemTypes = []
             self.webViewController?.doneBarButtonItemPosition = .right
@@ -134,20 +135,21 @@ public class InAppBrowserPlugin: CAPPlugin {
         }
 
         let headers = call.getObject("headers", [:]).mapValues { String(describing: $0 as Any) }
+        let credentials = call.getObject("credentials", [:]).mapValues { String(describing: $0 as Any) }
 
         self.isPresentAfterPageLoad = call.getBool("isPresentAfterPageLoad", false)
 
         DispatchQueue.main.async {
             let url = URL(string: urlString)
 
-            if self.isPresentAfterPageLoad {
-                self.webViewController = WKWebViewController.init(url: url!, headers: headers)
-            } else {
-                self.webViewController = WKWebViewController.init()
-                self.webViewController?.setHeaders(headers: headers)
+            self.webViewController = WKWebViewController.init(url: url!)
+            self.webViewController?.setHeaders(headers: headers)
+            if !credentials.isEmpty {
+                self.webViewController?.setCredentials(credentials: credentials)
             }
-
-            self.webViewController?.source = .remote(url!)
+            if self.isPresentAfterPageLoad {
+                self.webViewController?.initWebview()
+            }
             self.webViewController?.leftNavigaionBarItemTypes = [.reload]
             self.webViewController?.toolbarItemTypes = [.back, .forward, .activity]
             self.webViewController?.capBrowserPlugin = self

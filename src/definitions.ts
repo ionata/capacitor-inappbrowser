@@ -35,6 +35,11 @@ export interface Headers {
   [key: string]: string;
 }
 
+export interface Credentials {
+  username: string;
+  password: string;
+}
+
 export interface OpenOptions {
   /**
    * Target URL to load.
@@ -46,6 +51,11 @@ export interface OpenOptions {
    * @since 0.1.0
    */
   headers?: Headers;
+  /**
+   * Credentials to send with the request and all subsequent request for the same host.
+   * @since 1.1.0
+   */
+  credentials?: Credentials;
   /**
    * if true, the browser will be presented after the page is loaded, if false, the browser will be presented immediately.
    * @since 0.1.0
@@ -72,6 +82,11 @@ export interface OpenWebViewOptions {
    * @since 0.1.0
    */
   headers?: Headers;
+  /**
+   * Credentials to send with the request and all subsequent request for the same host.
+   * @since 1.1.0
+   */
+  credentials?: Credentials;
   /**
    * share options
    * @since 0.1.0

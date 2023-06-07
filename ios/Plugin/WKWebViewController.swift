@@ -38,23 +38,9 @@ open class WKWebViewController: UIViewController {
         super.init(coder: aDecoder)
     }
 
-    public init(source: WKWebSource?) {
-        super.init(nibName: nil, bundle: nil)
-        self.source = source
-        self.initWebview()
-    }
-
     public init(url: URL) {
         super.init(nibName: nil, bundle: nil)
         self.source = .remote(url)
-        self.initWebview()
-    }
-
-    public init(url: URL, headers: [String: String]) {
-        super.init(nibName: nil, bundle: nil)
-        self.source = .remote(url)
-        self.setHeaders(headers: headers)
-        self.initWebview()
     }
 
     open var hasDynamicTitle = false
@@ -74,6 +60,7 @@ open class WKWebViewController: UIViewController {
     var viewHeightLandscape: CGFloat?
     var viewHeightPortrait: CGFloat?
     var currentViewHeight: CGFloat?
+    fileprivate var credentials: [String: String]?
 
     func setHeaders(headers: [String: String]) {
         self.headers = headers
@@ -82,6 +69,10 @@ open class WKWebViewController: UIViewController {
         if userAgent != nil {
             self.customUserAgent = userAgent
         }
+    }
+    
+    func setCredentials(credentials: [String: String]?) {
+        self.credentials = credentials
     }
 
     internal var customUserAgent: String? {
@@ -738,7 +729,13 @@ extension WKWebViewController: WKNavigationDelegate {
     }
 
     public func webView(_ webView: WKWebView, didReceive challenge: URLAuthenticationChallenge, completionHandler: @escaping (URLSession.AuthChallengeDisposition, URLCredential?) -> Void) {
-        if let bypassedSSLHosts = bypassedSSLHosts, bypassedSSLHosts.contains(challenge.protectionSpace.host) {
+        if let credentials = credentials, let username = credentials["username"], let password = credentials["password"],
+           challenge.protectionSpace.receivesCredentialSecurely,
+           let url = webView.url, challenge.protectionSpace.host == url.host, challenge.protectionSpace.protocol == url.scheme, challenge.protectionSpace.port == url.port ?? (url.scheme == "https" ? 443 : url.scheme == "http" ? 80 : nil)
+        {
+            let credential = URLCredential(user: username, password: password, persistence: .none)
+            completionHandler(.useCredential, credential)
+        } else if let bypassedSSLHosts = bypassedSSLHosts, bypassedSSLHosts.contains(challenge.protectionSpace.host) {
             let credential = URLCredential(trust: challenge.protectionSpace.serverTrust!)
             completionHandler(.useCredential, credential)
         } else {
