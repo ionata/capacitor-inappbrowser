@@ -1,5 +1,7 @@
 {
   "name": "capacitor-app",
+  "private": true,
+  "type": "module",
   "version": "1.0.0",
   "description": "An Amazing Capacitor App",
   "main": "index.js",
@@ -8,17 +10,21 @@
     "mobile"
   ],
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview"
   },
   "dependencies": {
-    "@capacitor/camera": "^5.0.0",
-    "@capacitor/camera": "^4.1.4",
-    "@capacitor/core": "^5.0.0",
-    "@capacitor/splash-screen": "^5.0.0",
+    "@capacitor/android": "^5.0.4",
+    "@capacitor/core": "latest",
+    "@capacitor/ios": "^5.0.4",
+    "@capacitor/splash-screen": "latest",
     "@capgo/inappbrowser": "file:.."
   },
   "devDependencies": {
-    "@capacitor/cli": "^5.0.0"
+    "@capacitor/cli": "latest",
+    "typescript": "^5.1.3",
+    "vite": "^2.9.13"
   },
   "author": "",
   "license": "ISC"

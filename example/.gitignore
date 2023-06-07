@@ -4,3 +4,7 @@ node_modules/
 *.map
 .DS_Store
 .sourcemaps
+dist/
+android/
+ios/
+pnpm-lock.yaml
