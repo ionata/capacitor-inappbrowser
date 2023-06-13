@@ -1,6 +1,6 @@
 {
-  "name": "@capgo/inappbrowser",
-  "version": "6.0.19",
+  "name": "@ionata/capacitor-inappbrowser",
+  "version": "6.1.0",
   "description": "Capacitor plugin in app browser",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",
@@ -17,10 +17,10 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Cap-go/capacitor-inappbrowser.git"
+    "url": "https://github.com/ionata/capacitor-inappbrowser.git"
   },
   "bugs": {
-    "url": "https://github.com/Cap-go/capacitor-inappbrowser/issues"
+    "url": "https://github.com/ionata/capacitor-inappbrowser/issues"
   },
   "keywords": [
     "capacitor",
