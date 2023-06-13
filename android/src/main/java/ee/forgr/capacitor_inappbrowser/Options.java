@@ -8,6 +8,7 @@ public class Options {
   private String title;
   private String url;
   private JSObject headers;
+  private JSObject credentials;
   private String toolbarType;
   private JSObject shareDisclaimer;
   private String shareSubject;
@@ -45,6 +46,14 @@ public class Options {
 
   public void setHeaders(JSObject headers) {
     this.headers = headers;
+  }
+
+  public JSObject getCredentials() {
+    return credentials;
+  }
+
+  public void setCredentials(JSObject credentials) {
+    this.credentials = credentials;
   }
 
   public String getToolbarType() {
